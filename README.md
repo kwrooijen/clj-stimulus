@@ -10,6 +10,7 @@
 
 ```clojure
 :dependencies [[kwrooijen/stimulus "0.0.1-xxxxxxxx.yyyyyy-z"]
+;; Or lastest: [kwrooijen/stimulus "0.0.1-SNAPSHOT"]
                ,,,]
 ```
 
