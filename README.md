@@ -48,7 +48,6 @@ Read the [Stimulus handbook](https://stimulus.hotwire.dev/handbook/introduction)
   (update-output! this state))
 
 (defn add-amount [this state]
-  (println @state)
   (swap! state update :counter + (:amount @state))
   (update-output! this state))
 
