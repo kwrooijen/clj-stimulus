@@ -40,10 +40,33 @@
        (group-by (comp namespace first))
        (mapv (fn [[k v]] [k (apply hash-map (flatten v))]))))
 
-(defn start! []
+(defn start!
+  "Starts the Stimulus application. Stimulus must be started before
+  registering any controllers."
+  []
   (reset! stimulus-application (.start Application)))
 
-(defn register-controllers! [controllers]
+(defn register-controllers!
+  "Registers `controllers` using namespaces maps. The namespaces
+  represents the controller and the name represents the action. The
+  value of the key should be a function which takes two arguments,
+  `this` and `state`.
+
+
+  `:my-controller/static` is a special keyword which a map as a value
+  with the keys `:targets` and `:values`. `:targets` is a vector of
+  strings and `:values` is a map of keyword / type pairs. For the type
+  you can use regular Javascript types, or their keyword counterpart:
+
+  ```
+  :vector  : js/Array
+  :boolean : js/Boolean
+  :integer : js/Number
+  :map     : js/Object
+  :string  : js/String
+  ```
+  "
+  [controllers]
   (when-not @stimulus-application
     (start!))
   (doseq [[controller-key m] (group-controllers controllers)]
