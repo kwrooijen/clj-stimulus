@@ -6,10 +6,14 @@
 
 * [stimulus versions](http://repo.clojars.org/kwrooijen/stimulus/0.0.1-SNAPSHOT/)
 
+### project.clj
+
 ```clojure
 :dependencies [[kwrooijen/stimulus "0.0.1-xxxxxxxx.yyyyyy-z"]
                ,,,]
 ```
+
+### package.json
 
 ```javascript
 {
@@ -22,7 +26,7 @@
 
 ## Usage
 
-Read the [Stimulus handboot](https://stimulus.hotwire.dev/handbook/introduction)
+Read the [Stimulus handbook](https://stimulus.hotwire.dev/handbook/introduction)
 
 
 ### Clojurescript
