@@ -37,22 +37,21 @@ Read the [Stimulus handbook](https://stimulus.hotwire.dev/handbook/introduction)
   (:require
    [stimulus.core :as stimulus]))
 
-(defn update-output! [^js this state]
-  (set! (.. this -outputTarget -innerText) (:counter @state)))
+(defn set-counter! [output counter]
+  (set! (.-innerText output) counter))
 
-(defn initialize [^js this state]
-  (reset! state {:counter 0
-                 :amount (.-amountValue this)}))
+(defn initialize [state _ctx]
+  (reset! state {:counter 0}))
 
-(defn connect [this state]
-  (update-output! this state))
+(defn connect [_state {:keys [target]}]
+  (set-counter! (:output target) 0))
 
-(defn add-amount [this state]
-  (swap! state update :counter + (:amount @state))
-  (update-output! this state))
+(defn add-amount [state {:keys [target value]}]
+  (swap! state update :counter + (:amount value))
+  (set-counter! (:output target) (:counter @state)))
 
 (def controllers
-  {:counter/static {:targets ["output"]
+  {:counter/static {:targets [:output]
                     :values {:amount :integer}}
    :counter/initialize initialize
    :counter/connect connect
@@ -75,7 +74,21 @@ Read the [Stimulus handbook](https://stimulus.hotwire.dev/handbook/introduction)
   "Add Amount"]]
 ```
 
-## Author / License
+## Controllers
+
+Controller actions take two arguments:
+
+* `state` which holds an atom during the controllers lifetime.
+* `ctx` which is a map containing the following keys:
+
+| Field    | Description                |
+|:---------|:---------------------------|
+| :this    | The controllers object     |
+| :value   | A map of single values     |
+| :target  | A map of the first targets |
+| :targets | A map of multiple targets  |
+
+## author / License
 
 Released under the [MIT License] by [Kevin William van Rooijen].
 

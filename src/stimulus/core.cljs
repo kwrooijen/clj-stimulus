@@ -1,5 +1,6 @@
 (ns stimulus.core
   (:require
+   [stimulus.util :as util]
    ["stimulus" :as stimulus :refer [Controller Application]]
    ["classtrophobic-es5" :as cs]))
 
@@ -13,23 +14,34 @@
    :string js/String})
 
 (defn- process-values [m]
-  (when m
-    (into {}
-          (for [[k t] m]
-            [k (keyword->stimulus-value t t)]))))
+  (some->> m
+           (mapv (fn [[k t]] [k (keyword->stimulus-value t t)]))
+           (into {})))
 
-(defn- wrap-this [[k f]]
+(defn- map-ctx [this has-f get-f coll]
+  (->> coll
+       (mapv (fn [v] [v (when (has-f this v) (get-f this v))]))
+       (into {})))
+
+(defn- ctx [this values targets]
+  {:this this
+   :value (->> (mapv first values)
+               (map-ctx this stimulus.util/has-value? stimulus.util/get-value))
+   :target (map-ctx this stimulus.util/has-target? stimulus.util/get-target targets)
+   :targets (map-ctx this stimulus.util/has-target? stimulus.util/get-targets targets)})
+
+(defn- wrap-callbacks [{:keys [values targets]} [k f]]
   (condp = (keyword (name k))
     :static [k (update f :values process-values)]
     :initialize
     [k #(this-as ^js this
           (set! (.-state this) (atom {}))
-          (f this (.-state this)))]
+          (f (.-state this) (ctx this values targets)))]
     [k #(this-as ^js this
-          (f this (.-state this)))]))
+          (f (.-state this) (ctx this values targets)))]))
 
-(defn- ->stimulus-controller [m]
-  (-> (map wrap-this m)
+(defn- ->stimulus-controller [controller-key m]
+  (-> (map (partial wrap-callbacks (get m (keyword controller-key "static"))) m)
       (->> (into {}))
       (assoc :extends Controller)
       (clj->js)
@@ -70,4 +82,4 @@
   (when-not @stimulus-application
     (start!))
   (doseq [[controller-key m] (group-controllers controllers)]
-    (.register @stimulus-application (name controller-key) (->stimulus-controller m))))
+    (.register @stimulus-application (name controller-key) (->stimulus-controller controller-key m))))
