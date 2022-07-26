@@ -2,7 +2,7 @@
   (:require
    [stimulus.util :as util]
    ["@hotwired/stimulus" :as stimulus :refer [Controller Application]]
-   ["classtrophobic-es5" :as cs]))
+   ["classtrophobic" :as cs]))
 
 (defonce stimulus-application (atom nil))
 

@@ -19,7 +19,7 @@
 ```javascript
 {
     "dependencies": {
-        "classtrophobic-es5": "0.2.1",
+        "classtrophobic": "0.1.2",
         "stimulus": "2.0.0",
     }
 }
