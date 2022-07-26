@@ -1,7 +1,7 @@
 (ns stimulus.core
   (:require
    [stimulus.util :as util]
-   ["stimulus" :as stimulus :refer [Controller Application]]
+   ["@hotwired/stimulus" :as stimulus :refer [Controller Application]]
    ["classtrophobic-es5" :as cs]))
 
 (defonce stimulus-application (atom nil))
@@ -42,7 +42,7 @@
 
 (defn- ->stimulus-controller [controller-key m]
   (-> (map (partial wrap-callbacks (get m (keyword controller-key "static"))) m)
-      (->> (into {}))
+      (->> (into {:new (fn [])}))
       (assoc :extends Controller)
       (clj->js)
       (cs)))
