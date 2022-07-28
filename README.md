@@ -1,18 +1,10 @@
 # Clojure Stimulus
 
+[![Clojars Project](https://img.shields.io/clojars/v/kwrooijen/stimulus.svg)](https://clojars.org/kwrooijen/stimulus)
+
 ## Installation
 
-### Versions
-
-* [stimulus versions](http://repo.clojars.org/kwrooijen/stimulus/0.0.1-SNAPSHOT/)
-
-### project.clj
-
-```clojure
-:dependencies [[kwrooijen/stimulus "0.0.1-xxxxxxxx.yyyyyy-z"]
-;; Or lastest: [kwrooijen/stimulus "0.0.1-SNAPSHOT"]
-               ,,,]
-```
+`classtrophobic` is a necessary dependency since stimulus uses classes.
 
 ### package.json
 
@@ -20,7 +12,7 @@
 {
     "dependencies": {
         "classtrophobic": "0.1.2",
-        "stimulus": "2.0.0",
+        "stimulus": "3.1.0",
     }
 }
 ```
